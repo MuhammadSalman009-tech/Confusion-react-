@@ -30,7 +30,7 @@ class Dishdetail extends Component{
             return(
                 <div className="col-12 col-md-5">
                     <h4>Comments</h4>
-                    <div>
+                    <ul className="list-unstyled">
                         {comments.map(item=>{
                             var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
                             const date=new Date(item.date);
@@ -38,13 +38,13 @@ class Dishdetail extends Component{
                             const month=date.getMonth();
                             const year=date.getFullYear();
                             return(
-                                <div key={item.id}>
+                                <li key={item.id}>
                                     <p>{item.comment}</p>
                                     <p>--{item.author}, {months[month]} {day}, {year}</p>
-                                </div>
+                                </li>
                             );
                     })}
-                    </div>
+                    </ul>
                 </div>
             );
         }else{
@@ -58,12 +58,13 @@ class Dishdetail extends Component{
     
     
     render(){
-        const dish=this.props.dish;
-        if(dish!==null){
+        if(this.props.dish!==undefined){
+            var dish=this.props.dish;
             var comments=dish.comments;
             console.log(comments);
         }else{
             comments=null;
+            dish=null;
         }
         return(
             <div className="row">
