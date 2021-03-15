@@ -1,5 +1,6 @@
-import { Card, CardBody, CardImg, CardText, CardTitle,} from "reactstrap";
-    function RenderDish({dish}){
+import { Card, CardBody, CardImg, CardText, CardTitle, Breadcrumb, BreadcrumbItem} from "reactstrap";
+import {Link} from "react-router-dom";   
+function RenderDish({dish}){
         if(dish!==null){
             return(
                 <div className="col-12 col-md-5 m-1">
@@ -56,18 +57,37 @@ import { Card, CardBody, CardImg, CardText, CardTitle,} from "reactstrap";
     
     
     const Dishdetail=(props)=>{
-        if(props.dish!==undefined){
+        if(props.dish!==null){
             var dish=props.dish;
-            var comments=dish.comments;
+            var comments=props.comments;
             console.log(comments);
         }else{
             comments=null;
             dish=null;
         }
         return(
-            <div className="row">
-                <RenderDish dish={dish}/>
-                <RenderComments comments={comments}/>
+            <div className="container">
+                <div className="row">
+                    <Breadcrumb>
+                        <BreadcrumbItem>
+                            <Link to="/home">Home</Link>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem>
+                            <Link to="/menu">Menu</Link>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem>
+                            {dish.name}
+                        </BreadcrumbItem>
+                    </Breadcrumb>
+                    <div className="col-12">
+                        <h3>{dish.name}</h3>
+                        <hr/>
+                    </div>
+                </div>
+                <div className="row">
+                    <RenderDish dish={dish}/>
+                    <RenderComments comments={comments}/>
+                </div>
             </div>
         );
     }
