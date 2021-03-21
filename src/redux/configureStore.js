@@ -1,6 +1,6 @@
 import {createStore, combineReducers} from "redux";
 import {Dishes} from "./Dishes";
-import {Promotions, Protions} from "./Promotions";
+import {Promotions} from "./Promotions";
 import {Leaders} from "./Leaders";
 import {Comments} from "./Comments";
 
