@@ -29,7 +29,7 @@ export const LEADERS = [
     {
       id: 3,
       name: 'Muhammad Salman',
-      image: '/assets/images/salman.jpg',
+      image: 'images/salman.jpg',
       designation: 'Executive Chef',
       abbr: 'EC',
       featured: true,
