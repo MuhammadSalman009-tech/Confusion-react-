@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, CardBody, CardImg, CardSubtitle, CardText, CardTitle } from "reactstrap";
 import {Loading} from "./LoadingComponent";
+import {baseUrl} from "../shared/baseUrl";
 
 function RenderCard({item,isLoading,errMsg}){
 
@@ -15,7 +16,7 @@ function RenderCard({item,isLoading,errMsg}){
     }else{
         return(
             <Card>
-                <CardImg src={`assets/${item.image}`} alt={item.name} height="350px"/>
+                <CardImg src={baseUrl+item.image} alt={item.name} height="350px"/>
                 <CardBody>
                     <CardTitle>
                         <h4>{item.name}</h4>
