@@ -2,15 +2,45 @@ import * as ActionTypes from "./ActionTypes";
 import {baseUrl} from "../shared/baseUrl";
 
 //adding single comment from DishDetailComponent
-export const addComment=(dishId,comment,author,rating)=>({
+export const addComment=(comment)=>({
     type:ActionTypes.ADD_COMMENT,
-    payload:{
+    payload:comment
+})
+export const postComment=(dishId,comment,author,rating)=>(dispatch)=>{
+    const newComment={
         dishId:dishId,
         comment:comment,
         author:author,
         rating:rating
     }
-})
+    newComment.date=new Date().toISOString();
+
+    return fetch(baseUrl+'comments',{
+        method:"POST",
+        body:JSON.stringify(newComment),
+        headers:{
+            "Content-Type":"application/json"
+        },
+        credentials:"same-origin"
+    })
+    .then(res=>{
+        if(res.ok){
+            return res;
+        }else {
+            var error = new Error('Error ' + res.status + ': ' + res.statusText);
+            error.response = res;
+            throw error;
+          }
+    },error=>{
+        throw error;
+    })
+    .then(res=>res.json())
+    .then(data=>dispatch(addComment(data)))
+    .catch(error=>{
+        console.log("post commnets "+error.message);
+        alert("Your Comment could not be posted\nError: "+error.message);
+    })
+}
 
 // FETCHING DISHES
 export const fetchDishes=()=>(dispatch)=>{
