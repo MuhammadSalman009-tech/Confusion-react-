@@ -14,17 +14,30 @@ export const addComment=(dishId,comment,author,rating)=>({
 
 // FETCHING DISHES
 export const fetchDishes=()=>(dispatch)=>{
-    dispatch(isLoading(true));
+    dispatch(dishesLoading(true));
     
     return fetch(baseUrl+'dishes')
+    .then(res=>{
+        if(res.ok){
+            return res;
+        }else{
+            var error=new Error("Error "+res.status+" : "+res.statusText);
+            error.response=res;
+            throw error;
+        }
+    },error=>{
+        var errmess=new Error(error.message);
+        throw errmess;
+    })
     .then(res => res.json())
-    .then(dishes => dispatch(addDishes(dishes)));
+    .then(dishes => dispatch(addDishes(dishes)))
+    .catch(error=>dispatch(dishesFailed(error.message)));
 }
 
-export const isLoading=()=>({
+export const dishesLoading=()=>({
     type:ActionTypes.DISHES_LOADING
 })
-export const IsFailed=(errMsg)=>({
+export const dishesFailed=(errMsg)=>({
     type:ActionTypes.DISHES_FAILED,
     payload:errMsg
 })
@@ -38,8 +51,21 @@ export const addDishes=(dishes)=>({
 // FETCHING COMMENTS
 export const fetchComments=()=>(dispatch)=>{
     return fetch(baseUrl+'comments')
+    .then(res=>{
+        if(res.ok){
+            return res;
+        }else{
+            var error=new Error("Error "+res.status+" : "+res.statusText);
+            error.response=res;
+            throw error;
+        }
+    },error=>{
+        var errmess=new Error(error.message);
+        throw errmess;
+    })
     .then(res => res.json())
-    .then(comments=> dispatch(addComments(comments)));
+    .then(comments=> dispatch(addComments(comments)))
+    .catch(error=>dispatch(commentsFailed(error.message)));;
 }
 export const commentsFailed=(errMsg)=>({
     type: ActionTypes.COMMENTS_FAILED,
@@ -58,8 +84,21 @@ export const fetchPromos=()=>(dispatch)=>{
     dispatch(promosLoading());
     
     return fetch(baseUrl+'promotions')
+    .then(res=>{
+        if(res.ok){
+            return res;
+        }else{
+            var error=new Error("Error "+res.status+" : "+res.statusText);
+            error.response=res;
+            throw error;
+        }
+    },error=>{
+        var errmess=new Error(error.message);
+        throw errmess;
+    })
     .then(res => res.json())
-    .then(promotions => dispatch(addPromos(promotions)));
+    .then(promotions => dispatch(addPromos(promotions)))
+    .catch(error=>dispatch(promosFailed(error.message)));;
 }
 
 export const promosLoading=()=>({
