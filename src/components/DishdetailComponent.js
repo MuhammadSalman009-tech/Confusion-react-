@@ -5,6 +5,7 @@ import {Modal, ModalHeader, ModalBody, Label, Button, Row, Col} from "reactstrap
 import { Control, LocalForm, Errors } from 'react-redux-form';
 import {Loading} from "./LoadingComponent";
 import {baseUrl} from "../shared/baseUrl";
+import {FadeTransform, Fade, Stagger } from "react-animation-components";
 
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
 const minLength = (len) => (val) => val && (val.length >= len);
@@ -95,6 +96,11 @@ function RenderDish({dish}){
         if(dish!==null){
             return(
                 <div className="col-12 col-md-5 m-1">
+                    <FadeTransform
+                    in
+                    transformProps={{
+                        exitTransform: 'scale(0.5) translateY(-50%)'
+                    }}>
                     <Card>
                         <CardImg top width="100%" src={baseUrl+dish.image} alt={dish.name}/>
                         <CardBody>
@@ -106,6 +112,8 @@ function RenderDish({dish}){
                             </CardText>
                         </CardBody>
                     </Card>
+                </FadeTransform>
+                    
                 </div>
             );
         }else{
@@ -120,22 +128,26 @@ function RenderDish({dish}){
             return(
                 <div className="col-12 col-md-5">
                     <h4>Comments</h4>
-                    <ul className="list-unstyled">
-                        {comments.map(item=>{
-                            var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                            const date=new Date(item.date);
-                            const day=date.getDate();
-                            const month=date.getMonth();
-                            const year=date.getFullYear();
-                            return(
-                                <li key={item.id}>
-                                    <p>{item.comment}</p>
-                                    <p>--{item.author}, {months[month]} {day}, {year}</p>
-                                </li>
-                            );
-                    })}
-                    <CommentForm postComment={postComment} dishId={dishId}/>
-                    </ul>
+                    <Stagger in>
+                        <ul className="list-unstyled">
+                            {comments.map(item=>{
+                                var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                                const date=new Date(item.date);
+                                const day=date.getDate();
+                                const month=date.getMonth();
+                                const year=date.getFullYear();
+                                return(
+                                    <Fade in>
+                                        <li key={item.id}>
+                                            <p>{item.comment}</p>
+                                            <p>--{item.author}, {months[month]} {day}, {year}</p>
+                                        </li>
+                                    </Fade>
+                                );
+                        })}
+                        <CommentForm postComment={postComment} dishId={dishId}/>
+                        </ul>
+                    </Stagger>
                 </div>
             );
         }else{
