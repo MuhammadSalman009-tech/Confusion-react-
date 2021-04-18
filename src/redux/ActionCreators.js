@@ -42,6 +42,45 @@ export const postComment=(dishId,comment,author,rating)=>(dispatch)=>{
     })
 }
 
+//Post feedback
+export const postFeedBack=(firstname,lastname,telnum,email,agree,contactType,message)=>(dispatch)=>{
+    const newFeedback={
+        firstname:firstname,
+        lastname:lastname,
+        telnum:telnum,
+        email:email,
+        agree:agree,
+        contactType:contactType,
+        message:message,
+        date:new Date().toISOString(),
+
+    }
+
+    return fetch(baseUrl+'feedback',{
+        method:"POST",
+        body:JSON.stringify(newFeedback),
+        headers:{
+            "Content-Type":"application/json"
+        },
+        credentials:"same-origin"
+    })
+    .then(res=>{
+        if(res.ok){
+            return res;
+        }else {
+            var error = new Error('Error ' + res.status + ': ' + res.statusText);
+            error.response = res;
+            throw error;
+          }
+    },error=>{
+        throw error;
+    })
+    .catch(error=>{
+        console.log("post feedback "+error.message);
+        alert("Your Feedback could not be posted\nError: "+error.message);
+    })
+}
+
 // FETCHING DISHES
 export const fetchDishes=()=>(dispatch)=>{
     dispatch(dishesLoading(true));
@@ -144,3 +183,39 @@ export const addPromos=(promotions)=>({
     payload:promotions
 })
 // FETCHING PROMOS END
+
+// FETCHING LEADERS
+export const fetchLeaders=()=>(dispatch)=>{
+    dispatch(leadersLoading());
+    
+    return fetch(baseUrl+'leaders')
+    .then(res=>{
+        if(res.ok){
+            return res;
+        }else{
+            var error=new Error("Error "+res.status+" : "+res.statusText);
+            error.response=res;
+            throw error;
+        }
+    },error=>{
+        var errmess=new Error(error.message);
+        throw errmess;
+    })
+    .then(res => res.json())
+    .then(leaders => dispatch(addLeaders(leaders)))
+    .catch(error=>dispatch(leadersFailed(error.message)));
+}
+
+export const leadersLoading=()=>({
+    type:ActionTypes.LEADERS_LOADING
+})
+export const leadersFailed=(errMsg)=>({
+    type:ActionTypes.LEADERS_FAILED,
+    payload:errMsg
+})
+
+export const addLeaders=(leaders)=>({
+    type:ActionTypes.ADD_LEADERS,
+    payload:leaders
+})
+// FETCHING LEADERS END
